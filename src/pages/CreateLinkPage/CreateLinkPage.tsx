@@ -9,7 +9,6 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-
 import CardList from '../../components/CardList'
 import ColorPicker from '../../components/ColorPicker'
 import ModalContent from '../../components/ModalContent'
