@@ -4,6 +4,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -48,7 +49,15 @@ const Contributors: FC<ContributorsProps> = ({ contributors }) => {
         <Grid container direction="column">
           {contributors.map((contributor, index) => (
             <Grid item key={contributor}>
-                <Typography>{`${index + 1} ${contributor}`}</Typography>
+              <Link
+                href={`https://github.com/${contributor}`}
+                underline="hover"
+                target="_blank"
+                rel="noreferrer"
+                color="inherit"
+              >
+                {`${index + 1} ${contributor}`}
+              </Link>
             </Grid>
           ))}
         </Grid>
