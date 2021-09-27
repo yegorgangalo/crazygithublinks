@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { memo, forwardRef } from 'react'
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -28,11 +28,12 @@ interface ModalContentProps {
     link: string;
 }
 
-const ModalContent: FC<ModalContentProps> = ({ color, owner, repo, icon, link }) => {
+// const ModalContent: FC<ModalContentProps> = ({ color, owner, repo, icon, link }) => {
+const ModalContent = forwardRef<HTMLDivElement , ModalContentProps>(({ color, owner, repo, icon, link }, ref) => {
     const classes = useStyles();
 
     return (
-        <Card className={classes.root}>
+        <Card className={classes.root} ref={ref} tabIndex={-1} >
             <Grid container direction="column">
                 <Typography variant="subtitle2" className={classes.mb}>Share this link in social networks</Typography>
                 <LinkCopyTextField link={link} />
@@ -46,6 +47,6 @@ const ModalContent: FC<ModalContentProps> = ({ color, owner, repo, icon, link })
             </Grid>
         </Card>
     )
-}
+})
 
-export default ModalContent
+export default memo(ModalContent)
