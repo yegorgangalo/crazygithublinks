@@ -1,4 +1,4 @@
-import { FC, useRef } from 'react'
+import { FC, useCallback } from 'react'
 import { Redirect, useParams, useHistory } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
@@ -28,7 +28,7 @@ const CardLinkPage: FC = () => {
     const classes = useStyles()
     const history = useHistory()
 
-    const handleCreateOwnCard = useRef(() => history.push('/'))
+    const handleCreateOwnCard = useCallback(() => history.push('/'), [history])
 
     const { hash } = useParams<Params>()
 
@@ -61,7 +61,7 @@ const CardLinkPage: FC = () => {
                 />
                 </Grid>
                 <Grid item>
-                    <Button onClick={handleCreateOwnCard.current}>Create own card</Button>
+                    <Button onClick={handleCreateOwnCard}>Create own card</Button>
                 </Grid>
             </Grid>}
         </>

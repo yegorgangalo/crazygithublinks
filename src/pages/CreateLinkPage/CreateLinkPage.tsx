@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useEffect, useState, useRef, useCallback } from 'react'
+import { ChangeEvent, FC, useEffect, useState, useCallback } from 'react'
 import { useSnackbar } from 'notistack'
 import { useDebounce } from 'use-debounce';
 
@@ -45,11 +45,11 @@ const CreateLinkPage: FC = () => {
     // =========Owner============
     const [owner, setOwner] = useState<string>('')
     const [isOwnerExists, setIsOwnerExists] = useState<boolean>(false)
-    const handleOwnerChange = useRef((e: ChangeEvent<HTMLInputElement>) => setOwner(e.target.value))
+    const handleOwnerChange = useCallback((e: ChangeEvent<HTMLInputElement>) => setOwner(e.target.value), [])
 
     const [debouncedOwner] = useDebounce(owner, 500);
 
-    const checkIfOwnerExists = useRef(async (debouncedOwner: string) => {
+    const checkIfOwnerExists = useCallback(async (debouncedOwner: string) => {
         try {
             const { data } = await getOwner(debouncedOwner)
             if (data.login !== debouncedOwner) {
@@ -60,23 +60,23 @@ const CreateLinkPage: FC = () => {
             setIsOwnerExists(false)
             enqueueSnackbar(`Author ${debouncedOwner} does not exists on GitHub`, { variant: "warning"})
         }
-    })
+    }, [enqueueSnackbar])
 
     useEffect(() => {
         if (debouncedOwner) {
-            checkIfOwnerExists.current(debouncedOwner)
+            checkIfOwnerExists(debouncedOwner)
         }
-    }, [debouncedOwner])
+    }, [debouncedOwner, checkIfOwnerExists])
     // ====================================
 
     // =========Repository============
     const [repo, setRepo] = useState<string>('')
     const [isRepoExists, setIsRepoExists] = useState(false)
-    const handleRepoChange = useRef((e: ChangeEvent<HTMLInputElement>) => setRepo(e.target.value))
+    const handleRepoChange = useCallback((e: ChangeEvent<HTMLInputElement>) => setRepo(e.target.value), [])
 
-    const [debouncedRepo] = useDebounce(repo, 1000);
+    const [debouncedRepo] = useDebounce(repo, 500);
 
-    const checkIfRepoExists = useRef(async (debouncedOwner: string, debouncedRepo: string) => {
+    const checkIfRepoExists = useCallback(async (debouncedOwner: string, debouncedRepo: string) => {
         try {
             const { data } = await getOwnerRepo(debouncedOwner, debouncedRepo)
             if (data.name !== debouncedRepo) {
@@ -87,30 +87,28 @@ const CreateLinkPage: FC = () => {
             setIsRepoExists(false)
             enqueueSnackbar(`Repository ${debouncedRepo} does not exists`, { variant: "warning"})
         }
-    })
+    }, [enqueueSnackbar])
 
     useEffect(() => {
         if (debouncedOwner && debouncedRepo) {
-            checkIfRepoExists.current(debouncedOwner, debouncedRepo)
+            checkIfRepoExists(debouncedOwner, debouncedRepo)
         }
-    }, [debouncedOwner, debouncedRepo])
-
+    }, [debouncedOwner, debouncedRepo, checkIfRepoExists])
     // ====================================
 
     // ==============ColorPicker======================
     const [color, setColor] = useState<string>('#fff')
-    const handleChangeComplete = useRef((color: any) => setColor(color.hex))
+    const handleChangeComplete = useCallback((color: any) => setColor(color.hex), [])
     // ======================================
 
-    // =================Icon=====================
+    // =================select icon=====================
     const [icon, setIcon] = useState<string>('')
-    const handleOnClickIconCard = useRef((iconName: string) => setIcon(iconName))
-
+    const handleOnClickIconCard = useCallback((iconName: string) => setIcon(iconName), [])
     // ======================================
 
     // ================Modal======================
     const [isOpenModal, setIsOpenModal] = useState(false)
-    const toggleOpenModal = useRef(() => setIsOpenModal(prev => !prev))
+    const toggleOpenModal = useCallback(() => setIsOpenModal(prev => !prev), [])
     // ======================================
 
     const [linkURL, setLinkURL] = useState<string>('')
@@ -124,9 +122,9 @@ const CreateLinkPage: FC = () => {
         const { pathname: tinyPathname } = new URL(tinyURL)
         const shortLinkURL = `${baseURL}${tinyPathname}`
         setLinkURL(shortLinkURL)
-        toggleOpenModal.current()
+        toggleOpenModal()
         },
-        [color, owner, repo, icon],
+        [color, owner, repo, icon, toggleOpenModal],
     )
 
     const isCreateLinkButtonDisabled = !isOwnerExists || !isRepoExists || !icon
@@ -154,7 +152,7 @@ const CreateLinkPage: FC = () => {
                             fullWidth
                             label="Author"
                             value={owner}
-                            onChange={handleOwnerChange.current}
+                            onChange={handleOwnerChange}
                             variant="outlined"
                             size="small"
                             className={classes.textField}
@@ -165,7 +163,7 @@ const CreateLinkPage: FC = () => {
                             fullWidth
                             label="Repository"
                             value={repo}
-                            onChange={handleRepoChange.current}
+                            onChange={handleRepoChange}
                             variant="outlined"
                             size="small"
                             disabled={!isOwnerExists || !owner}
@@ -174,11 +172,11 @@ const CreateLinkPage: FC = () => {
                     </Grid>
                     <ColorPicker
                         color={color}
-                        handleChangeComplete={handleChangeComplete.current}
+                        handleChangeComplete={handleChangeComplete}
                     />
                     <CardList
                         selectedIcon={icon}
-                        handleOnClickIconCard={handleOnClickIconCard.current}
+                        handleOnClickIconCard={handleOnClickIconCard}
                     />
                     <Grid item className={classes.marginBottom}>
                         <Button
@@ -196,7 +194,7 @@ const CreateLinkPage: FC = () => {
             </Grid>
             <Modal
                 open={isOpenModal}
-                onClose={toggleOpenModal.current}
+                onClose={toggleOpenModal}
             >
                 <ModalContent
                     color={color}

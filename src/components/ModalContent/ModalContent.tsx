@@ -1,4 +1,4 @@
-import { FC, useRef, KeyboardEvent } from 'react'
+import { FC, useCallback, KeyboardEvent } from 'react'
 import { useSnackbar } from 'notistack'
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
@@ -44,18 +44,18 @@ const ModalContent: FC<ModalContentProps> = ({ color, owner, repo, icon, link })
     const { enqueueSnackbar } = useSnackbar()
 
     // =====copy to clipboard handle & on press key Enter=====
-    const { current: handleCopyInputTextToClipboard } = useRef(() => {
+    const handleCopyInputTextToClipboard = useCallback(() => {
       navigator.clipboard
         .writeText(link)
         .then(() => enqueueSnackbar('Link is copied to clipboard', { variant: "success" }))
         .catch(() => enqueueSnackbar('Link is not copied to clipboard. Try again, please.', { variant: "error" }))
-    });
+    }, [enqueueSnackbar, link]);
 
-  const { current: handlePressKeyToCopyInputTextToClipboard } = useRef((e: KeyboardEvent) => {
+  const handlePressKeyToCopyInputTextToClipboard = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleCopyInputTextToClipboard();
     }
-  });
+  }, [handleCopyInputTextToClipboard]);
   // =======================================================
 
     return (

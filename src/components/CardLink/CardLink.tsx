@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, useCallback, useRef, ChangeEvent } from 'react'
+import { FC, useState, useEffect, useCallback, ChangeEvent } from 'react'
 import { useSnackbar } from 'notistack'
 import Card from '@material-ui/core/Card';
 import Box from '@material-ui/core/Box';
@@ -70,7 +70,7 @@ const CardLink: FC<CardLinkProps> = ({ color, owner, repo, icon }) => {
     // ================getContributors====================
     const [contributors, setContributors] = useState<string[]>([])
 
-    const getContributorList = useRef(async () => {
+    const getContributorList = useCallback(async () => {
         try {
             const { data } = await getContributors(owner, repo)
             const contributors = (data as IContributor[]).map(({ login }) => login).slice(0, 10)
@@ -78,7 +78,7 @@ const CardLink: FC<CardLinkProps> = ({ color, owner, repo, icon }) => {
         } catch (e) {
             enqueueSnackbar('Can\'t get contributors', { variant: "warning"})
         }
-    })
+    }, [owner, repo, enqueueSnackbar])
     // ====================================
 
     const fetchData = useCallback(
@@ -98,8 +98,8 @@ const CardLink: FC<CardLinkProps> = ({ color, owner, repo, icon }) => {
 
     useEffect(() => {
         fetchData()
-        getContributorList.current()
-    }, [fetchData])
+        getContributorList()
+    }, [fetchData, getContributorList])
 
     const SelectedIcon = icons[icon as keyof typeof icons]
     const { AiFillStar, AiOutlineStar, AiOutlineSend } = icons
@@ -107,16 +107,16 @@ const CardLink: FC<CardLinkProps> = ({ color, owner, repo, icon }) => {
     // ================Modal======================
     const [isOpenModal, setIsOpenModal] = useState(false)
     const [isStarredRepo, setIsStarredRepo] = useState(false)
-    const toggleOpenModal = useRef(() => setIsOpenModal(prev => !prev))
+    const toggleOpenModal = useCallback(() => setIsOpenModal(prev => !prev), [])
 
     const [tokenPAT, setTokenPAT] = useState<string>('')
-    const handleTokenPATChange = useRef((e: ChangeEvent<HTMLInputElement>) => setTokenPAT(e.target.value))
+    const handleTokenPATChange = useCallback((e: ChangeEvent<HTMLInputElement>) => setTokenPAT(e.target.value), [])
 
     const handleClickToStarRepo = useCallback(async () => {
         try {
             const { status } = await checkIsStarredRepo(owner, repo, tokenPAT)
             if (status === 204) {
-                toggleOpenModal.current()
+                toggleOpenModal()
                 setIsStarredRepo(true)
                 return
             }
@@ -129,13 +129,13 @@ const CardLink: FC<CardLinkProps> = ({ color, owner, repo, icon }) => {
             if (status !== 204) {
                 throw Error('Try again')
             }
-            toggleOpenModal.current()
+            toggleOpenModal()
             setStarsAmount(prev => prev + 1)
             setIsStarredRepo(true)
         } catch (error) {
             enqueueSnackbar((error as Error).message, { variant: "warning"})
         }
-    }, [owner, repo, tokenPAT, enqueueSnackbar]);
+    }, [owner, repo, tokenPAT, enqueueSnackbar, toggleOpenModal]);
     // ======================================
 
     return (
@@ -151,7 +151,7 @@ const CardLink: FC<CardLinkProps> = ({ color, owner, repo, icon }) => {
                     <Typography>Description: {repoDescription || 'no description'}</Typography>
                     <Typography>
                         Stars: {starsAmount}
-                        <IconButton className={classes.starButton} onClick={toggleOpenModal.current}>
+                        <IconButton className={classes.starButton} onClick={toggleOpenModal}>
                             {isStarredRepo ? <AiFillStar /> : <AiOutlineStar />}
                         </IconButton>
                     </Typography>
@@ -161,13 +161,13 @@ const CardLink: FC<CardLinkProps> = ({ color, owner, repo, icon }) => {
             </Card>
             <Modal
                 open={isOpenModal}
-                onClose={toggleOpenModal.current}
+                onClose={toggleOpenModal}
             >
                 <Card className={classes.modalContent}>
                     <Box position="relative">
                         <TextField
                             value={tokenPAT}
-                            onChange={handleTokenPATChange.current}
+                            onChange={handleTokenPATChange}
                             variant="outlined"
                             label="Fill your personal auth token"
                             fullWidth

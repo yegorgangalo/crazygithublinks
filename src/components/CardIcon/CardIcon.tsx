@@ -1,4 +1,4 @@
-import { useRef, FC, ReactNode, memo } from 'react'
+import { useCallback, FC, ReactNode, memo } from 'react'
 import Card from '@material-ui/core/Card'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles, Theme } from '@material-ui/core/styles';
@@ -29,13 +29,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const CardIcon: FC<CardIconProps> = ({ children, onClick, iconName, selectedIcon }) => {
     const classes = useStyles();
-    const handleOnClick = useRef(() => onClick(iconName))
+    const handleOnClick = useCallback(() => onClick(iconName), [iconName, onClick])
 
     return (
         <Grid item className={classes.margin}>
             <Card
                 className={`${classes.card} ${selectedIcon && classes.selectedIcon}`}
-                onClick={handleOnClick.current}
+                onClick={handleOnClick}
             >
                 <Grid container justifyContent="center">
                     {children}

@@ -44,11 +44,11 @@ const ColorPicker: FC<ColorPickerProps> = ({ color, handleChangeComplete}) => {
         setShowColorPicker((prev) => !prev)
     }, [colorButtonRef])
 
-    const hideColorPicker = useRef((e: MouseEvent) => {
+    const hideColorPicker = useCallback((e: MouseEvent) => {
         if (e.target === e.currentTarget) {
             setShowColorPicker((prev) => !prev)
         }
-    })
+    }, [])
 
     return (
         <Grid item className={classes.marginBottom}>
@@ -63,7 +63,7 @@ const ColorPicker: FC<ColorPickerProps> = ({ color, handleChangeComplete}) => {
                 Pick Color
             </Button>
             {showColorPicker && (
-                <Box className={classes.backdrop} onClick={hideColorPicker.current}>
+                <Box className={classes.backdrop} onClick={hideColorPicker}>
                     <Box style={{left, top, position: "absolute"}}>
                         <ChromePicker
                             disableAlpha
