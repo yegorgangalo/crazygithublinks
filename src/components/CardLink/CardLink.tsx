@@ -76,7 +76,7 @@ const CardLink: FC<CardLinkProps> = ({ color, owner, repo, icon }) => {
             const contributors = (data as IContributor[]).map(({ login }) => login).slice(0, 10)
             setContributors(contributors)
         } catch (e) {
-            enqueueSnackbar('Can\'t get contributors', { variant: "warning"})
+            enqueueSnackbar("Can't get contributors", { variant: "warning"})
         }
     }, [owner, repo, enqueueSnackbar])
     // ====================================

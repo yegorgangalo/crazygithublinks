@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: 50,
   },
   backdrop: {
-      zIndex: 2,
+    zIndex: 2,
     position: 'fixed',
     top: 0,
     right: 0,
