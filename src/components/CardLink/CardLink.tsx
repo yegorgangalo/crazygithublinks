@@ -118,6 +118,7 @@ const CardLink: FC<CardLinkProps> = ({ color, owner, repo, icon }) => {
             if (status === 204) {
                 toggleOpenModal()
                 setIsStarredRepo(true)
+                enqueueSnackbar('Your are already starring this repository', { variant: "info"})
                 return
             }
         } catch (error) {

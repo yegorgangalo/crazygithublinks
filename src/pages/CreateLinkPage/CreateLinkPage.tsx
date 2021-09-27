@@ -12,6 +12,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import CardList from '../../components/CardList'
 import ColorPicker from '../../components/ColorPicker'
 import ModalContent from '../../components/ModalContent'
+import LinkCopyTextField from '../../components/LinkCopyTextField'
 import { getOwner, getOwnerRepo, getShortURL } from '../../API/api'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -20,6 +21,9 @@ const useStyles = makeStyles((theme: Theme) => ({
         padding: theme.spacing(2),
         width: 400,
         background: '#F3F3F3',
+    },
+    prevLinkBlock: {
+        width: 400,
     },
     marginBottom: {
       marginBottom: theme.spacing(2),
@@ -111,6 +115,7 @@ const CreateLinkPage: FC = () => {
     const toggleOpenModal = useCallback(() => setIsOpenModal(prev => !prev), [])
     // ======================================
 
+    // ================create Link======================
     const [linkURL, setLinkURL] = useState<string>('')
 
     const handleCreateLink = useCallback(async () => {
@@ -122,10 +127,28 @@ const CreateLinkPage: FC = () => {
         const { pathname: tinyPathname } = new URL(tinyURL)
         const shortLinkURL = `${baseURL}${tinyPathname}`
         setLinkURL(shortLinkURL)
+        localStorage.setItem('shortLinkURL', JSON.stringify({shortLinkURL, owner, repo}))
         toggleOpenModal()
         },
         [color, owner, repo, icon, toggleOpenModal],
     )
+    // ======================================
+
+    // =================PrevLink=====================
+    const [prevLink, setPrevLink] = useState<string>('')
+    const [prevOwner, setPrevOwner] = useState<string>('')
+    const [prevRepo, setPrevRepo] = useState<string>('')
+
+    useEffect(() => {
+        const lsLink = localStorage.getItem('shortLinkURL')
+        if (lsLink) {
+            const { shortLinkURL, owner, repo } = JSON.parse(lsLink)
+            setPrevLink(shortLinkURL)
+            setPrevOwner(owner)
+            setPrevRepo(repo)
+        }
+    }, [linkURL])
+    // ======================================
 
     const isCreateLinkButtonDisabled = !isOwnerExists || !isRepoExists || !icon
 
@@ -135,6 +158,8 @@ const CreateLinkPage: FC = () => {
                 container
                 justifyContent="center"
                 alignItems="center"
+                direction="column"
+                spacing={6}
             >
                 <Grid
                     item
@@ -191,6 +216,14 @@ const CreateLinkPage: FC = () => {
                         </Button>
                     </Grid>
                 </Grid>
+                {prevLink && <Grid item className={classes.prevLinkBlock} >
+                    <LinkCopyTextField
+                        link={prevLink}
+                        size="small"
+                        label="Your previous created link"
+                        title={`Author: ${prevOwner}\n Repository: ${prevRepo}`}
+                    />
+                </Grid>}
             </Grid>
             <Modal
                 open={isOpenModal}
