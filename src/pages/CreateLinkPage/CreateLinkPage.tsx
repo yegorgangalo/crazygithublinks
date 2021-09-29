@@ -13,7 +13,8 @@ import CardList from '../../components/CardList'
 import ColorPicker from '../../components/ColorPicker'
 import ModalContent from '../../components/ModalContent'
 import LinkCopyTextField from '../../components/LinkCopyTextField'
-import { getOwner, getOwnerRepo, getShortURL } from '../../API/api'
+import { getOwner, getOwnerRepo, getShortURL } from '../../API'
+import { IPickerColor, reactIcon } from '../../interfaces'
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -102,12 +103,12 @@ const CreateLinkPage: FC = () => {
 
     // ==============ColorPicker======================
     const [color, setColor] = useState<string>('#fff')
-    const handleChangeComplete = useCallback((color: any) => setColor(color.hex), [])
+    const handleChangeComplete = useCallback((color: IPickerColor) => setColor(color.hex), [])
     // ======================================
 
     // =================select icon=====================
     const [icon, setIcon] = useState<string>('')
-    const handleOnClickIconCard = useCallback((iconName: string) => setIcon(iconName), [])
+    const handleOnClickIconCard = useCallback((iconName: reactIcon) => setIcon(iconName), [])
     // ======================================
 
     // ================Modal======================

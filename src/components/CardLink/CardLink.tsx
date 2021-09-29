@@ -8,8 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import * as icons from 'react-icons/ai'
-import { getOwnerRepo, getContributors, starRepo, checkIsStarredRepo } from '../../API/api'
+import * as reactIcons from 'react-icons/ai'
+import { getOwnerRepo, getContributors, starRepo, checkIsStarredRepo } from '../../API'
 import { IContributor } from '../../interfaces'
 import Contributors from '../Contributors'
 
@@ -101,8 +101,8 @@ const CardLink: FC<CardLinkProps> = ({ color, owner, repo, icon }) => {
         getContributorList()
     }, [fetchData, getContributorList])
 
-    const SelectedIcon = icons[icon as keyof typeof icons]
-    const { AiFillStar, AiOutlineStar, AiOutlineSend } = icons
+    const SelectedIcon = reactIcons[icon as keyof typeof reactIcons]
+    const { AiFillStar, AiOutlineStar, AiOutlineSend } = reactIcons
 
     // ================Modal======================
     const [isOpenModal, setIsOpenModal] = useState(false)

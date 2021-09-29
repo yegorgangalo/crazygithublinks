@@ -2,11 +2,12 @@ import { useCallback, FC, KeyboardEvent, ReactNode, memo } from 'react'
 import Card from '@material-ui/core/Card'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import { reactIcon } from '../../interfaces'
 
 interface CardIconProps {
     children: ReactNode;
-    onClick: (iconName: string) => void;
-    iconName: string;
+    onClick: (iconName: reactIcon) => void;
+    iconName: reactIcon;
     selectedIcon: boolean;
 }
 
@@ -31,7 +32,7 @@ const CardIcon: FC<CardIconProps> = ({ children, onClick, iconName, selectedIcon
     const classes = useStyles();
     const handleOnClick = useCallback(() => onClick(iconName), [iconName, onClick])
 
-    const handlePressKeyToSelectIcon = useCallback((e: KeyboardEvent<HTMLElement>) => {
+    const handlePressKeyToSelectIcon = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleOnClick();
     }

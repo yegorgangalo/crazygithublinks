@@ -1,6 +1,6 @@
 import { FC, useState, useEffect, useCallback } from 'react'
 import { Redirect, useParams } from 'react-router-dom';
-import { checkTinyURL } from '../../API/api'
+import { checkTinyURL } from '../../API'
 
 interface Params {
     shorthash: string,
