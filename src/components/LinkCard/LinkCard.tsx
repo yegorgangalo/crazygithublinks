@@ -1,17 +1,18 @@
 import { FC, useState, useEffect, useCallback, ChangeEvent, memo } from 'react'
 import { useSnackbar } from 'notistack'
 import Card from '@material-ui/core/Card';
-import Box from '@material-ui/core/Box';
+// import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
-import TextField from '@material-ui/core/TextField';
+// import TextField from '@material-ui/core/TextField';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import * as reactIcons from 'react-icons/ai'
 import { getOwnerRepo, getContributors, starRepo, checkIsStarredRepo } from '../../API'
-import { IContributor } from '../../interfaces'
+import { IContributor, reactIcon } from '../../interfaces'
 import Contributors from '../Contributors'
+import TextFieldWithButton from '../TextFieldWithButton'
 
 const useStyles = makeStyles((theme: Theme) => ({
   card: {
@@ -101,8 +102,8 @@ const LinkCard: FC<LinkCardProps> = ({ color, owner, repo, icon }) => {
         getContributorList()
     }, [fetchData, getContributorList])
 
-    const SelectedIcon = reactIcons[icon as keyof typeof reactIcons]
-    const { AiFillStar, AiOutlineStar, AiOutlineSend } = reactIcons
+    const SelectedIcon = reactIcons[icon as reactIcon]
+    const { AiFillStar, AiOutlineStar } = reactIcons
 
     // ================Modal======================
     const [isOpenModal, setIsOpenModal] = useState(false)
@@ -165,19 +166,12 @@ const LinkCard: FC<LinkCardProps> = ({ color, owner, repo, icon }) => {
                 onClose={toggleOpenModal}
             >
                 <Card className={classes.modalContent}>
-                    <Box position="relative">
-                        <TextField
-                            value={tokenPAT}
-                            onChange={handleTokenPATChange}
-                            variant="outlined"
-                            label="Fill your personal auth token"
-                            fullWidth
-                            className={classes.modalInput}
-                        />
-                        <IconButton className={classes.modalButton} onClick={handleClickToStarRepo}>
-                            <AiOutlineSend />
-                        </IconButton>
-                    </Box>
+                    <TextFieldWithButton
+                        value={tokenPAT}
+                        label="Fill your personal auth token"
+                        onChange={handleTokenPATChange}
+                        onClickButton={handleClickToStarRepo}
+                    />
                 </Card>
             </Modal>
             </>

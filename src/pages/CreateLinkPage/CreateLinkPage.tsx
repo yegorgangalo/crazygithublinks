@@ -1,4 +1,5 @@
 import { ChangeEvent, FC, useEffect, useState, useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { useDebounce } from 'use-debounce';
 
@@ -12,7 +13,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import CardList from '../../components/IconList'
 import ColorPicker from '../../components/ColorPicker'
 import ModalContent from '../../components/ModalContent'
-import LinkCopyTextField from '../../components/CopyLinkTextField'
+import CopyLinkTextField from '../../components/CopyLinkTextField'
 import { getOwner, getOwnerRepo, getShortURL } from '../../API'
 import { IPickerColor, reactIcon } from '../../interfaces'
 
@@ -45,6 +46,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const CreateLinkPage: FC = () => {
     const classes = useStyles();
+    const history = useHistory()
     const { enqueueSnackbar } = useSnackbar();
 
     // =========Owner============
@@ -123,12 +125,13 @@ const CreateLinkPage: FC = () => {
         const baseURL = window.location.origin
         const queryParams = `?owner=${owner}&repo=${repo}&color=${color}&icon=${icon}`
         const encodedQueryParams = btoa(queryParams);
-        const longLinkURL = `${baseURL}/card/${encodedQueryParams}`
+        const longPathname = `card/${encodedQueryParams}`
+        const longLinkURL = `${baseURL}/${longPathname}`
         const { data: tinyURL } = await getShortURL(longLinkURL)
         const { pathname: tinyPathname } = new URL(tinyURL)
         const shortLinkURL = `${baseURL}${tinyPathname}`
         setLinkURL(shortLinkURL)
-        localStorage.setItem('shortLinkURL', JSON.stringify({shortLinkURL, owner, repo}))
+        localStorage.setItem('shortLinkURL', JSON.stringify({shortLinkURL, owner, repo, longPathname}))
         toggleOpenModal()
         },
         [color, owner, repo, icon, toggleOpenModal],
@@ -139,16 +142,20 @@ const CreateLinkPage: FC = () => {
     const [prevLink, setPrevLink] = useState<string>('')
     const [prevOwner, setPrevOwner] = useState<string>('')
     const [prevRepo, setPrevRepo] = useState<string>('')
+    const [prevLongPathname, setPrevLongPathname] = useState<string>('')
 
     useEffect(() => {
         const lsLink = localStorage.getItem('shortLinkURL')
         if (lsLink) {
-            const { shortLinkURL, owner, repo } = JSON.parse(lsLink)
+            const { shortLinkURL, owner, repo, longPathname } = JSON.parse(lsLink)
             setPrevLink(shortLinkURL)
             setPrevOwner(owner)
             setPrevRepo(repo)
+            setPrevLongPathname(longPathname)
         }
     }, [linkURL])
+
+    const handleFollowLink = useCallback(() => history.push(prevLongPathname), [history, prevLongPathname])
     // ======================================
 
     const isCreateLinkButtonDisabled = !isOwnerExists || !isRepoExists || !icon
@@ -218,11 +225,12 @@ const CreateLinkPage: FC = () => {
                     </Grid>
                 </Grid>
                 {prevLink && <Grid item className={classes.prevLinkBlock} >
-                    <LinkCopyTextField
+                    <CopyLinkTextField
                         link={prevLink}
                         size="small"
                         label="Your previous created link"
                         title={`Author: ${prevOwner}\n Repository: ${prevRepo}`}
+                        onClickButton={handleFollowLink}
                     />
                 </Grid>}
             </Grid>

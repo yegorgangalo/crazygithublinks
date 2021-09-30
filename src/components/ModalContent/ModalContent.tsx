@@ -3,8 +3,8 @@ import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import CardLink from '../LinkCard'
-import LinkCopyTextField from '../CopyLinkTextField'
+import LinkCard from '../LinkCard'
+import CopyLinkTextField from '../CopyLinkTextField'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -36,9 +36,9 @@ const ModalContent = forwardRef<HTMLDivElement , ModalContentProps>(({ color, ow
         <Card className={classes.root} ref={ref} tabIndex={-1} >
             <Grid container direction="column">
                 <Typography variant="subtitle2" className={classes.mb}>Share this link in social networks</Typography>
-                <LinkCopyTextField link={link} />
+                <CopyLinkTextField link={link} />
                 <Typography variant="subtitle2" className={classes.mb}>Card preview</Typography>
-                <CardLink
+                <LinkCard
                     color={color}
                     owner={owner}
                     repo={repo}

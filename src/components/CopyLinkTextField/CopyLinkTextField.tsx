@@ -1,9 +1,13 @@
 import { FC, useCallback, KeyboardEvent } from 'react'
 import { useSnackbar } from 'notistack'
 import TextField from '@material-ui/core/TextField';
+import Box from '@material-ui/core/Box';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
 import FileCopy from '@material-ui/icons/FileCopy';
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import { AiOutlineSend } from 'react-icons/ai'
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -22,8 +26,20 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     marginBottom: theme.spacing(4),
   },
+  withButton: {
+    '& .MuiInputBase-root': {
+        paddingRight: 40,
+    },
+  },
   mb: {
       marginBottom: theme.spacing(1),
+  },
+  followButton: {
+      borderRadius: '0 4px 4px 0',
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      padding: 8,
   },
 }));
 
@@ -32,9 +48,10 @@ interface CopyLinkTextFieldProps {
     size?: 'medium' | 'small';
     label?: string;
     title?: string;
+    onClickButton?(): void;
 }
 
-const CopyLinkTextField: FC<CopyLinkTextFieldProps> = ({ link, size, label, title }) => {
+const CopyLinkTextField: FC<CopyLinkTextFieldProps> = ({ link, size, label, title, onClickButton }) => {
     const classes = useStyles();
     const { enqueueSnackbar } = useSnackbar()
 
@@ -54,7 +71,8 @@ const CopyLinkTextField: FC<CopyLinkTextFieldProps> = ({ link, size, label, titl
   // =======================================================
 
     return (
-        <TextField
+        <Box position="relative">
+          <TextField
             value={link}
             onClick={handleCopyInputTextToClipboard}
             onKeyDown={handlePressKeyToCopyInputTextToClipboard}
@@ -63,7 +81,7 @@ const CopyLinkTextField: FC<CopyLinkTextFieldProps> = ({ link, size, label, titl
             label={label}
             title={title}
             variant="outlined"
-            className={classes.copyInput}
+            className={clsx(classes.copyInput, onClickButton && classes.withButton)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -71,7 +89,11 @@ const CopyLinkTextField: FC<CopyLinkTextFieldProps> = ({ link, size, label, titl
                 </InputAdornment>
               ),
             }}
-        />
+          />
+          {onClickButton && <IconButton className={classes.followButton} onClick={onClickButton}>
+              <AiOutlineSend />
+          </IconButton>}
+        </Box>
     )
 }
 

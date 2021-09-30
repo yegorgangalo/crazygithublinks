@@ -24,7 +24,7 @@ interface Params {
     hash: string,
 }
 
-const CardLinkPage: FC = () => {
+const LinkCardPage: FC = () => {
     const classes = useStyles()
     const history = useHistory()
 
@@ -68,4 +68,4 @@ const CardLinkPage: FC = () => {
     )
 }
 
-export default CardLinkPage;
+export default LinkCardPage;
