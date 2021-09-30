@@ -2,6 +2,7 @@ import { useCallback, FC, KeyboardEvent, ReactNode, memo } from 'react'
 import Card from '@material-ui/core/Card'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import clsx from 'clsx'
 import { reactIcon } from '../../interfaces'
 
 interface IconItemProps {
@@ -41,7 +42,7 @@ const IconItem: FC<IconItemProps> = ({ children, onClick, iconName, selectedIcon
     return (
         <Grid item className={classes.margin}>
             <Card
-                className={`${classes.card} ${selectedIcon && classes.selectedIcon}`}
+                className={clsx(classes.card, selectedIcon && classes.selectedIcon)}
                 onClick={handleOnClick}
                 onKeyDown={handlePressKeyToSelectIcon}
                 tabIndex={0}
