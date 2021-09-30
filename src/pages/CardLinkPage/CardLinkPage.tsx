@@ -3,7 +3,7 @@ import { Redirect, useParams, useHistory } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import CardLink from '../../components/CardLink'
+import CardLink from '../../components/LinkCard'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {

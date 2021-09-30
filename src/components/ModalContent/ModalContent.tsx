@@ -3,8 +3,8 @@ import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import CardLink from '../CardLink'
-import LinkCopyTextField from '../LinkCopyTextField'
+import CardLink from '../LinkCard'
+import LinkCopyTextField from '../CopyLinkTextField'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {

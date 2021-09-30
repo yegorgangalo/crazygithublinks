@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, useCallback, ChangeEvent } from 'react'
+import { FC, useState, useEffect, useCallback, ChangeEvent, memo } from 'react'
 import { useSnackbar } from 'notistack'
 import Card from '@material-ui/core/Card';
 import Box from '@material-ui/core/Box';
@@ -51,14 +51,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface CardLinkProps {
+interface LinkCardProps {
     color: string;
     owner: string;
     repo: string;
     icon: string;
 }
 
-const CardLink: FC<CardLinkProps> = ({ color, owner, repo, icon }) => {
+const LinkCard: FC<LinkCardProps> = ({ color, owner, repo, icon }) => {
     const classes = useStyles();
     const { enqueueSnackbar } = useSnackbar();
 
@@ -184,4 +184,4 @@ const CardLink: FC<CardLinkProps> = ({ color, owner, repo, icon }) => {
     )
 }
 
-export default CardLink
+export default memo(LinkCard)

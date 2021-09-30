@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { reactIcon } from '../../interfaces'
 
-interface CardIconProps {
+interface IconItemProps {
     children: ReactNode;
     onClick: (iconName: reactIcon) => void;
     iconName: reactIcon;
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-const CardIcon: FC<CardIconProps> = ({ children, onClick, iconName, selectedIcon }) => {
+const IconItem: FC<IconItemProps> = ({ children, onClick, iconName, selectedIcon }) => {
     const classes = useStyles();
     const handleOnClick = useCallback(() => onClick(iconName), [iconName, onClick])
 
@@ -54,4 +54,4 @@ const CardIcon: FC<CardIconProps> = ({ children, onClick, iconName, selectedIcon
     )
 }
 
-export default memo(CardIcon)
+export default memo(IconItem)

@@ -4,10 +4,10 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import CardIcon from '../CardIcon'
+import CardIcon from '../IconItem'
 import { reactIcon } from '../../interfaces'
 
-interface CardListProps {
+interface IconListProps {
     selectedIcon: string;
     handleOnClickIconCard: (iconName: reactIcon) => void;
 }
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
-const CardList: FC<CardListProps> = ({ selectedIcon, handleOnClickIconCard }) => {
+const IconList: FC<IconListProps> = ({ selectedIcon, handleOnClickIconCard }) => {
     const classes = useStyles();
 
     const iconsNames = useMemo(() => {
@@ -51,4 +51,4 @@ const CardList: FC<CardListProps> = ({ selectedIcon, handleOnClickIconCard }) =>
     )
 }
 
-export default memo(CardList)
+export default memo(IconList)

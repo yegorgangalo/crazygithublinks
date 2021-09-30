@@ -27,14 +27,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface LinkCopyTextFieldProps {
+interface CopyLinkTextFieldProps {
     link: string;
     size?: 'medium' | 'small';
     label?: string;
     title?: string;
 }
 
-const LinkCopyTextField: FC<LinkCopyTextFieldProps> = ({ link, size, label, title }) => {
+const CopyLinkTextField: FC<CopyLinkTextFieldProps> = ({ link, size, label, title }) => {
     const classes = useStyles();
     const { enqueueSnackbar } = useSnackbar()
 
@@ -75,4 +75,4 @@ const LinkCopyTextField: FC<LinkCopyTextFieldProps> = ({ link, size, label, titl
     )
 }
 
-export default LinkCopyTextField
+export default CopyLinkTextField
